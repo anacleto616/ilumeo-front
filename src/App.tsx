@@ -1,8 +1,11 @@
+import GlobalStyle from './styles/global'
+
 function App() {
   return (
-    <h1>
-      Hello Ilumeo
-    </h1>
+    <>
+      <GlobalStyle />
+      <h1>Hello Ilumeo</h1>
+    </>
   );
 }
 
