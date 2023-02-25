@@ -24,11 +24,11 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
+    color: #fff;
 
     label {
       font-weight: 300;
       font-size: 0.75rem;
-      color: #fff;
       position: absolute;
       margin: 7px 0 38px 17px;
     }
@@ -37,7 +37,6 @@ export const Container = styled.div`
       background-color: #1E2733;
       font-size: 1.35rem;
       font-weight: 600;
-      color: #fff;
       width: 100%;
       height: 60px;
       margin-bottom: 24px;
@@ -52,8 +51,10 @@ export const Container = styled.div`
       background: linear-gradient(124.18deg, #FE8A00 22.06%, #FE8A00 81.62%);
       font-weight: 700;
       font-size: 1rem;
+      color: #1E2733;
       border-style: none;
       border-radius: 4px;
+      cursor: pointer;
     }
   }
 `;
