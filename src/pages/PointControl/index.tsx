@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { api } from '../../libraries/axios';
 import { EmployeeType } from '../../types/Employee';
 import { PointControlHistoricFormattedType } from '../../types/PointControlHistoricFormattedType';
+import { PointControlType } from '../../types/PointControlType';
 import { Container } from './styles';
 
 export default function PointControl() {
@@ -11,12 +12,26 @@ export default function PointControl() {
 
   const [employee, setEmployee] = useState<EmployeeType>();
 
+  const [officeHours, setOfficeHours] = useState<string>('0h');
+
   async function handleGetEmployee() {
     const response = await api.get<EmployeeType>(
       '/employee/074df31f-8d81-4e02-876e-621ab63d19de'
     );
 
     setEmployee(response.data);
+  }
+
+  async function handleSavePointControlHistoric() {
+    const dayWorked = new Date().toISOString();
+
+    await api.post<PointControlType>('/point-control-historic/074df31f-8d81-4e02-876e-621ab63d19de', {
+      dayWorked,
+      employeeId: '074df31f-8d81-4e02-876e-621ab63d19de',
+      workedHours: 400,
+    });
+
+    alert('Registro de ponto salvo com sucesso! Até mais!');
   }
 
   async function handleGetPointControlHistoric() {
