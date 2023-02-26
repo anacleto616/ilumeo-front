@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { api } from '../../libraries/axios';
+import { EmployeeType } from '../../types/Employee';
 import { PointControlHistoricFormattedType } from '../../types/PointControlHistoricFormattedType';
 import { Container } from './styles';
 
@@ -8,8 +9,18 @@ export default function PointControl() {
   PointControlHistoricFormattedType[]
   >([]);
 
+  const [employee, setEmployee] = useState<EmployeeType>();
+
+  async function handleGetEmployee() {
+    const response = await api.get<EmployeeType>(
+      '/employee/074df31f-8d81-4e02-876e-621ab63d19de'
+    );
+
+    setEmployee(response.data);
+  }
+
   async function handleGetPointControlHistoric() {
-    const response = await api.get(
+    const response = await api.get<PointControlHistoricFormattedType[]>(
       '/point-control-historic/074df31f-8d81-4e02-876e-621ab63d19de'
     );
 
@@ -17,6 +28,10 @@ export default function PointControl() {
   }
 
   const { current: pointControlHistoricCurrent } = useRef(pointControlHistoric);
+
+  useEffect(() => {
+    handleGetEmployee();
+  }, []);
 
   useEffect(() => {
     handleGetPointControlHistoric();
@@ -29,13 +44,13 @@ export default function PointControl() {
           <h5>Relógio de ponto</h5>
 
           <div className="codeName">
-            <span>#ABCD123</span>
-            <span className="codeName__name">Anacleto</span>
+            <span>#{employee?.employee_code}</span>
+            <span className="codeName__name">{employee?.name}</span>
           </div>
         </div>
 
         <div className="hour">
-          <span className="hour__time">0h00m</span>
+          <span className="hour__time">0h</span>
           <span>Horas de hoje</span>
         </div>
       </header>
