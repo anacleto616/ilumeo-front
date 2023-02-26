@@ -9,7 +9,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  span {
+  h3 {
     font-size: 1.31rem;
     color: #CFCFCF;
     font-weight: 400;
@@ -40,15 +40,22 @@ export const Container = styled.div`
       color: #fff;
       width: 100%;
       height: 60px;
-      margin-bottom: 24px;
       padding: 26px 0 8px 14px;
       border-style: none;
       border-radius: 4px;
     }
 
+    p {
+      font-size: 0.75rem;
+      color: #f00;
+      margin-top: 5px;
+      font-weight: 700;
+    }
+
     button {
       width: 100%;
       height: 47px;
+      margin-top: 24px;
       background: linear-gradient(124.18deg, #FE8A00 22.06%, #FE8A00 81.62%);
       font-weight: 700;
       font-size: 1rem;
