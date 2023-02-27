@@ -25,7 +25,7 @@ export default function PointControlAccess() {
     formState: { errors },
   } = useForm<EmployeeType>({ resolver: yupResolver(validationEmployee) });
 
-  const handleAccesPointControl = async (data: FieldValues) => {
+  async function handleAccesPointControl(data: FieldValues) {
     try {
       const access = await api.post('/access', data);
 
@@ -34,13 +34,13 @@ export default function PointControlAccess() {
       const employee = employees.data.find((employee) => employee.employee_code === data.employee_code);
 
       if (access.status === 200) {
-        alert(`Bem-vindo ao controle de ponto, ${employee?.name}!`);
+        alert(`Bem-vindo(a) ao controle de ponto, ${employee?.name}!`);
         navigate(`/point-control/${employee?.id}`);
       }
     } catch (error) {
       alert('Código Inválido.');
     }
-  };
+  }
 
   return (
     <Container>
