@@ -1,42 +1,75 @@
 import { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import Button from '../../components/Button';
 import { api } from '../../libraries/axios';
 import { EmployeeType } from '../../types/Employee';
 import { PointControlHistoricFormattedType } from '../../types/PointControlHistoricFormattedType';
 import { PointControlType } from '../../types/PointControlType';
+import toHoursAndMinutes from '../../utils/toHoursAndMinutes';
 import { Container } from './styles';
 
 export default function PointControl() {
+  const { id } = useParams();
+
+  const [employee, setEmployee] = useState<EmployeeType>();
+
   const [pointControlHistoric, setPointControlHistoric] = useState<
   PointControlHistoricFormattedType[]
   >([]);
 
-  const [employee, setEmployee] = useState<EmployeeType>();
-
+  const [workedHours, setWorkedHours] = useState<number>(0);
+  const [startHour, setStartHour] = useState<number>(0);
   const [officeHours, setOfficeHours] = useState<string>('0h');
+  const [timeActive, setTimeActive] = useState<boolean>(false);
 
   async function handleGetEmployee() {
     const response = await api.get<EmployeeType>(
-      '/employee/074df31f-8d81-4e02-876e-621ab63d19de'
+      `/employee/${id}`
     );
 
     setEmployee(response.data);
   }
 
+  async function handleSetOrResetDataTime() {
+    if (!timeActive) {
+      setTimeActive(true);
+      setStartHour(Date.now());
+      return;
+    }
+    setTimeActive(false);
+    setStartHour(0);
+    setOfficeHours('0h');
+    handleSavePointControlHistoric();
+    window.location.reload();
+  }
+
+  async function handleTimer() {
+    if (timeActive) {
+      console.log('entrou aqui: timer');
+
+      const currentOfficeHoursMilisec = (Date.now() - startHour);
+      const currentOfficeHoursMinutes = Math.floor(currentOfficeHoursMilisec / 60000);
+      const currentOfficeHours = toHoursAndMinutes(currentOfficeHoursMinutes);
+      setWorkedHours(currentOfficeHoursMinutes);
+      setOfficeHours(currentOfficeHours);
+    }
+  }
+
   async function handleSavePointControlHistoric() {
     const dayWorked = new Date().toISOString();
 
-    await api.post<PointControlType>('/point-control-historic/074df31f-8d81-4e02-876e-621ab63d19de', {
-      dayWorked,
-      employeeId: '074df31f-8d81-4e02-876e-621ab63d19de',
-      workedHours: 400,
+    await api.post<PointControlType>('/point-control-historic', {
+      day_worked: dayWorked,
+      employeeId: id,
+      worked_hours: workedHours,
     });
 
-    alert('Registro de ponto salvo com sucesso! Até mais!');
+    alert('Saída finalizada! Registro de ponto salvo com sucesso! Até mais!');
   }
 
   async function handleGetPointControlHistoric() {
     const response = await api.get<PointControlHistoricFormattedType[]>(
-      '/point-control-historic/074df31f-8d81-4e02-876e-621ab63d19de'
+      `/point-control-historic/${id}`
     );
 
     setPointControlHistoric(response.data);
@@ -47,6 +80,12 @@ export default function PointControl() {
   useEffect(() => {
     handleGetEmployee();
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => handleTimer(), 60000);
+
+    return () => clearInterval(interval);
+  }, [timeActive === true]);
 
   useEffect(() => {
     handleGetPointControlHistoric();
@@ -65,12 +104,14 @@ export default function PointControl() {
         </div>
 
         <div className="hour">
-          <span className="hour__time">0h</span>
+          <span className="hour__time">{officeHours}</span>
           <span>Horas de hoje</span>
         </div>
       </header>
 
-      <button>Hora de (entrada/saída)</button>
+      <Button onClick={handleSetOrResetDataTime}>
+        {!timeActive ? 'Hora de entrada' : 'Hora de saída'}
+      </Button>
 
       <div className="historicContainer">
         <h5>Dias anteriores</h5>
