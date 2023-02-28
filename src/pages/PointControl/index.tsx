@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Button from '../../components/Button';
+import PointControlHistoric from '../../components/PointControlHistoric';
 import { api } from '../../libraries/axios';
 import { EmployeeType } from '../../types/Employee';
 import { PointControlHistoricFormattedType } from '../../types/PointControlHistoricFormattedType';
@@ -40,13 +41,12 @@ export default function PointControl() {
     setStartHour(0);
     setOfficeHours('0h');
     handleSavePointControlHistoric();
+    alert('Saída finalizada! Registro de ponto salvo com sucesso! Até mais!');
     window.location.reload();
   }
 
   async function handleTimer() {
     if (timeActive) {
-      console.log('entrou aqui: timer');
-
       const currentOfficeHoursMilisec = (Date.now() - startHour);
       const currentOfficeHoursMinutes = Math.floor(currentOfficeHoursMilisec / 60000);
       const currentOfficeHours = toHoursAndMinutes(currentOfficeHoursMinutes);
@@ -63,8 +63,6 @@ export default function PointControl() {
       employeeId: id,
       worked_hours: workedHours,
     });
-
-    alert('Saída finalizada! Registro de ponto salvo com sucesso! Até mais!');
   }
 
   async function handleGetPointControlHistoric() {
@@ -116,10 +114,11 @@ export default function PointControl() {
       <div className="historicContainer">
         <h5>Dias anteriores</h5>
         {pointControlHistoric.map(pointControl => (
-          <div key={pointControl.id} className="historic">
-            <span className="historic__date">{pointControl.day_worked}</span>
-            <span>{pointControl.worked_hours}</span>
-          </div>
+          <PointControlHistoric
+            key={pointControl.id}
+            day_worked={pointControl.day_worked}
+            worked_hours={pointControl.worked_hours}
+          />
         ))}
       </div>
     </Container>
