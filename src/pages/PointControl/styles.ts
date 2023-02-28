@@ -7,6 +7,18 @@ export const Container = styled.div`
   font-size: 0.75rem;
   color: #F5F5F5;
 
+  @media screen and (max-width: 399px) {
+    width: 300px;
+  }
+
+  @media screen and (max-width: 325px) {
+    width: 280px;
+  }
+
+  @media screen and (max-width: 308px) {
+    width: 260px;
+  }
+
   header {
     display: flex;
     flex-direction: column;

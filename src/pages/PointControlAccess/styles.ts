@@ -9,6 +9,18 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
 
+  @media screen and (max-width: 399px) {
+    width: 300px;
+  }
+
+  @media screen and (max-width: 325px) {
+    width: 280px;
+  }
+
+  @media screen and (max-width: 308px) {
+    width: 255px;
+  }
+
   h3 {
     font-size: 1.31rem;
     color: #CFCFCF;
