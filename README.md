@@ -17,6 +17,10 @@
 - Entre na pasta ilumeo-api com: `cd ilumeo-front`
 - Digite o comando: `npm install`, para instalar as dependências do projeto
 - Execute a aplicação com o comando: `npm start`, estará rodando no endereço: `http://localhost:3000`
+- Para acessar utilize um dos códigos abaixo:
+  - ABCD123
+  - EFGH456
+  - IJKL789
 
 ## 📤️ Deploy
   - Deploy da aplicação feito na plataforma vercel, hospedado no link: https://ilumeo-front.vercel.app/
